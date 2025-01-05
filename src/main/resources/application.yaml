@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: client-application
+
+
+  cache:
+    type: caffeine
+  security:
+    oauth2:
+      client:
+        registration:
+          messaging-client:
+            provider: spring
+            client-id: spielwiese-client
+            client-secret: pwd
+            authorization-grant-type: authorization_code
+            scope: message.read,message.write
+        provider:
+          spring:
+            issuer-uri: http://keycloak.local/realms/spielwiese-realm
+management:
+  metrics:
+    tags:
+      environment: dev
+  health:
+    jms:
+      enabled: true
+    db:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      group:
+        livenessprobe:
+          include: ping
+        readinessprobe:
+          include: ping
+        startupprobe:
+          include: ping
+    prometheus:
+      access: unrestricted
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    exporter:
+      jaeger:
+        endpoint: http://jaeger:4318/v1/traces
+    resource-attributes:
+      instrumentation.provider: micrometer
+      service.name: ${spring.application.name}
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+tracing:
+  url: http://jaeger.local:4318/v1/traces

@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: OrderAPI
+  description: Order API for demonstration purposes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8088
+tags:
+  - name: orders
+    description: Order operations
+paths:
+  /api/orders:
+    get:
+      summary: Get all orders
+      operationId: getOrders
+      tags:
+        - orders
+      responses:
+        '200':
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      summary: Create a new order
+      operationId: createOrder
+      tags:
+        - orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /api/orders/{orderId}:
+    get:
+      summary: Get an order by ID
+      operationId: getOrderByOrderId
+      tags:
+        - orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+components:
+  schemas:
+    Order:
+      required:
+        - orderId
+        - item
+        - quantity
+        - price
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        item:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+          format: float
