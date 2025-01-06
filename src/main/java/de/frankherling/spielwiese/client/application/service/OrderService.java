@@ -32,9 +32,8 @@ public class OrderService implements OrderPort {
 
             Order order = Order.builder()
                     .orderId(orderId)
-                    .item("Item")
-                    .price(100f)
-                    .quantity(4)
+                    .orderStatus(Order.OrderStatusEnum.PLACED)
+                    .orderType(Order.OrderTypeEnum.FREE)
                     .build();
             Order order1 = ordersApi.createOrder(order);
             log.info("Order created: {}", order1);
